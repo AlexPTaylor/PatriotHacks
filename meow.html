@@ -29,3 +29,12 @@
 </head>
 <body>
     <div class="cat"></div>
+    <script>
+        function changeCat() {
+            const cats = [
+                <IMG SRC = "https://th.bing.com/th/id/R.270ef77e819b2d673848751ee067304a?rik=owewyaLZ6L%2bKKQ&pid=ImgRaw&r=0">
+            ];
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            document.getElementById("greeting").innerText = messages[randomIndex];
+        }
+    </script>

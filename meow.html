@@ -29,10 +29,19 @@
 <body>
     <h1>CAT!!</h1>
     <audio controls>
-        <source src="cat-89108.mp3" type="audio/mpeg">
+        <audio id="meow">
+            <source src="cat-89108.mp3" type="audio/mpeg">
+        </audio>
     </audio>
+    <button onclick="meow()">Meow</button>
     <button id="imageButton"></button>
 
+    <script>
+        function meow(){
+            var audio = document.getElementById("meow");
+            audio.play();
+        }
+    </script>
     <script>
         const images = [
             'https://th.bing.com/th/id/R.270ef77e819b2d673848751ee067304a?rik=owewyaLZ6L%2bKKQ&pid=ImgRaw&r=0', // Replace with actual image URLs

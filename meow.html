@@ -37,7 +37,7 @@
         #imageButton {
             width: 1000px;
             height: 600px;
-            background-color: #26fa00; /* Set background color to match the webpage */
+            background-color: transparent; /* Set background color to match the webpage */
             background-size: contain; /* Ensure the background image fits without cropping */
             background-repeat: no-repeat; /* Prevent image repetition */
             background-position: center; /* Center the image */
@@ -64,10 +64,34 @@
             margin-right: 10px; /* Space between label and counter */
             font-size: 28px; /* Adjust this value to make the text larger */
         }
+        /* Container for buttons, positioned at the top */
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center the buttons horizontally */
+            margin-top: 20px;
+            gap: 10px; /* Add space between buttons */
+        }
+        .play-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div id="wrapper">
+        <!-- Container for buttons -->
+        <div class="button-container">
+            <button class="play-button" data-index="0">Cat 1</button>
+            <button class="play-button" data-index="1">Cat 2</button>
+            <button class="play-button" data-index="2">Cat 3</button>
+            <button class="play-button" data-index="3">Cat 4</button>
+        </div>
+
         <div id="topHalf">
             <h1 id="title">CAT!!</h1>
             <div class="counter-container">
@@ -82,68 +106,107 @@
     <audio id="soundPlayer"></audio>
 
     <script>
+        // Array of cat images, sounds, and titles
         const cats = [
             {
                 image: 'https://th.bing.com/th/id/R.270ef77e819b2d673848751ee067304a?rik=owewyaLZ6L%2bKKQ&pid=ImgRaw&r=0',
-                sound: 'we-live-we-love-we-lie.mp3'
+                sound: 'we-live-we-love-we-lie.mp3',
+                title: 'Dance party!!',
+                backgroundImage: 'https://media1.giphy.com/media/26tOZ42Mg6pbTUPHW/giphy.gif'
             },
             {
                 image: 'https://media.tenor.com/EFDwfjT2GuQAAAAM/spinning-cat.gif',
-                sound: 'oiia_spinning_cat.mp3'
+                sound: 'oiia_spinning_cat.mp3',
+                title: 'OOEEAAOOEEAOOEAOE' 
+
             },
             {
                 image: 'https://d2bzx2vuetkzse.cloudfront.net/unshoppable_producs/53f42582-a34c-4df2-897f-93d00193b05f.png',
                 sound: 'cat-89108.mp3',
-                title: 'THIS IS BINGUS' // Title change for the third image
+                title: 'THIS IS BINGUS' 
             },
             {
                 image: 'https://www.bing.com/th/id/OGC.e61c5a38841afcbc0ce595e944f1ac21?pid=1.7&rurl=https%3a%2f%2f49.media.tumblr.com%2fd0e7d2b110798af2e7422ba3ec93789d%2ftumblr_nxrd4aBARX1uxebowo1_400.gif&ehk=w6PTmBkt%2b8ykHnu0AarNO34AS4bcynY8tFf1NfhiJIs%3d',
                 sound: 'sad-meow-song.mp3',
-                title: 'THIS IS a monkey'
-                
+                title: 'THIS IS a monkey',
+                backgroundImage: 'https://www.jamaicaoceanviewvilla.com/wp-content/uploads/2023/02/Jamaica-Juicy-mangoes-.jpeg'
             }
         ];
-
+    
+        const wrapper = document.getElementById('wrapper'); // Get the wrapper element
         let currentIndex = 0;
-
         const button = document.getElementById('imageButton');
         const soundPlayer = document.getElementById('soundPlayer');
         const display = document.getElementById('counterDisplay');
         const titleElement = document.getElementById('title');
         const bottomHalf = document.getElementById('bottomHalf');
-
+    
         // Initialize the button with the first image
         button.style.backgroundImage = `url(${cats[currentIndex].image})`;
-        titleElement.textContent = 'CAT!!'; // Set initial title
+        titleElement.textContent = cats[currentIndex].title; // Set initial title
     
         let count = 0;
-
-        button.onclick = function() {
-            currentIndex = (currentIndex + 1) % cats.length; // Cycle through images
-            button.style.backgroundImage = `url(${cats[currentIndex].image})`;
-            soundPlayer.src = cats[currentIndex].sound; // Play associated sound
-            soundPlayer.play();
+    
+        // Function to update the displayed image, title, and play sound
+        function playSoundShowImageAndTitle(index) {
+            const cat = cats[index]; // Retrieve the object based on index
+            currentIndex = index;
+    
+            button.style.backgroundImage = `url(${cat.image})`; // Update the image
+            titleElement.textContent = cat.title; // Update the title
+            soundPlayer.src = cat.sound; // Set the sound source
+            soundPlayer.play(); // Play the sound
+    
+    
             count++;
-            display.textContent = count;
-
-            // Update title based on the current image
-            if (cats[currentIndex].title) {
-                titleElement.textContent = cats[currentIndex].title; // Change title if specified
-            } else {
-                titleElement.textContent = 'CAT!!'; // Reset title for other images
+            display.textContent = count; // Update the counter
+    
+            // Change background colors based on the index
+            if(index == 0 || index == 3){
+                // Set the background image, checking if it exists
+                wrapper.style.backgroundImage = `url(${cat.backgroundImage})`;
+                bottomHalf.style.backgroundColor = 'transparent';
+                topHalf.style.backgroundColor = 'transparent';
+                button.style.backgroundColor = 'transparent';
+                titleElement.style.color = 'white';
+             
             }
-
-            // Change background color for the top and bottom halves based on the current image
-            if (currentIndex === 2) { // Third image index
-                document.getElementById('topHalf').style.backgroundColor = 'white'; // Set top half to white
+            else if (index == 2) { // If the third image is selected (index 2)
+                wrapper.style.backgroundColor = 'white';
+                topHalf.style.backgroundColor = 'white'; // Set top half to white
                 bottomHalf.style.backgroundColor = 'purple'; // Change bottom half to purple
                 button.style.backgroundColor = 'purple'; // Change button background to purple
+                wrapper.style.backgroundImage ='';
+                titleElement.style.color = 'black';
             } else {
-                document.getElementById('topHalf').style.backgroundColor = '#26fa00'; // Set top half to green
+                wrapper.style.backgroundImage = '';
+                topHalf.style.backgroundColor = '#26fa00'; // Set top half to default green
                 bottomHalf.style.backgroundColor = '#26fa00'; // Change back to default green
                 button.style.backgroundColor = '#26fa00'; // Reset button background to default green
+                titleElement.style.color = 'black';
             }
-        };
+        }
+    
+        // Add event listeners to the buttons
+        const playButtons = document.querySelectorAll('.play-button');
+        playButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const index = button.getAttribute('data-index'); // Get the index from data attribute
+                playSoundShowImageAndTitle(index); // Call the function with the correct index
+            });
+        });
+    
+        // Replay the sound and gif when the image is clicked
+        button.addEventListener('click', () => {
+            soundPlayer.currentTime = 0; // Reset sound to start
+            soundPlayer.play(); // Replay sound
+    
+            const currentGif = cats[currentIndex].image;
+            button.style.backgroundImage = ''; // Temporarily clear the image
+            setTimeout(() => {
+                button.style.backgroundImage = `url(${currentGif})`; // Reload the gif to replay
+            }, 0);
+        });
     </script>
 </body>
 </html>
